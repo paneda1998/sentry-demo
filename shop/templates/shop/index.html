@@ -1,0 +1,28 @@
+{% load static %}
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Checkout Lab</title>
+<link rel="stylesheet" href="{% static 'shop/style.css' %}">
+{{ sentry_config|json_script:"sentry-config" }}
+{% if sentry_config.enabled %}<script src="{% static 'shop/vendor/sentry-11.4.0.min.js' %}"></script>{% endif %}
+<script defer src="{% static 'shop/sentry-browser.js' %}"></script>
+<script defer src="{% static 'shop/checkout.js' %}"></script></head>
+<body><main>
+<header data-replay-public><p class="eyebrow">CHECKOUT LAB</p><h1>A small shop.<br>A real debugging story.</h1><p class="subtitle">Place an order, investigate a failure, and find a slow operation.</p></header>
+<div class="layout"><section class="checkout">
+<h2 data-replay-public>Your order</h2>
+<form id="checkout-form">{% csrf_token %}
+<label data-replay-public for="product">Product</label><select id="product" name="product">{% for product in products %}<option value="{{ product.id }}" data-price="{{ product.price }}">{{ product.name }} — ${{ product.price }}</option>{% endfor %}</select>
+<label data-replay-public for="quantity">Quantity</label><input id="quantity" type="number" min="1" max="10" value="1" required>
+<label data-replay-public for="coupon">Discount code</label><div class="coupon-row"><input id="coupon" maxlength="30" placeholder="Try SAVE10" autocomplete="off"><button id="apply-coupon" type="button" class="secondary" data-replay-public>Apply</button></div>
+<p id="coupon-status" class="muted" role="status"></p>
+<div class="summary" data-replay-public><span>Estimated total</span><strong id="total">$83.50</strong><small>Includes $4.50 shipping. No real payment is collected.</small></div>
+<button id="place-order" type="submit" data-replay-public>Place order</button>
+<p id="status" aria-live="polite" data-replay-public>Ready when you are.</p>
+</form></section>
+<aside class="controls"><h2 data-replay-public>Presenter controls</h2><p class="muted" data-replay-public>All products and identities in this lab are synthetic.</p>
+<label for="scenario" data-replay-public>Scenario</label><select id="scenario"><option value="normal">Normal checkout</option><option value="backend-error">Backend error</option><option value="frontend-error">Frontend error</option><option value="slow">Slow shipping</option></select>
+<label for="demo-user" data-replay-public>Demo identity</label><select id="demo-user"><option>demo-user-1</option><option>demo-user-2</option><option>demo-user-3</option></select>
+<button id="reset-session" type="button" class="secondary" data-replay-public>Reset page</button>
+<p id="sdk-state" class="muted" data-replay-public></p>
+</aside></div>
+</main></body></html>
